@@ -1,5 +1,4 @@
-# 流畅 拖动排序 拖拽排序 easydrag-sort
-## 拖拽跳转，组件名：`easydrag-sort`
+## 流畅 拖动排序 拖拽排序，组件名：`easydrag-sort`
 
 使用方式：
 
