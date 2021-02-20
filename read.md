@@ -6,9 +6,9 @@
 在 `script` 中引用组件
 
 ```
-import dragNavigate from '@/components/easydrag-sort/easydrag-sort.vue';
+import easydragSort from '@/components/easydrag-sort/easydrag-sort.vue';
 export default {
-    components: {easydrag-sort}
+    components: {easydragSort}
 }
 ```
 在 `template` 中使用组件
