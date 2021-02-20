@@ -16,6 +16,7 @@
 				currentList: [],
 				active: -1, // 当前激活的item
 				index: 0, // 当前激活的item的原index
+				width: 0
 			}
 		},
 		props: {
@@ -41,7 +42,6 @@
 		watch: {
 			list: {
 				handler() {
-					debugger
 					this.onUpdateCurrentList()
 				},
 				deep: true
@@ -52,7 +52,7 @@
 				return this.itemw / 2
 			},
 			collisionOffY() {
-				return this.itemY / 2
+				return this.itemh / 2
 			}
 		},
 		mounted() {
@@ -62,8 +62,8 @@
 				this.topX = res[0].left
 				this.topY = res[0].top
 				this.width = res[0].width
+				this.onUpdateCurrentList()
 			})
-			this.onUpdateCurrentList()
 		},
 		methods: {
 			onUpdateCurrentList(list = this.list) {
@@ -106,7 +106,7 @@
 					}
 				}
 
-				this.$emit('change', this.currentList)
+				index == -1 && this.$emit('change', this.currentList)
 			},
 			touchstart(e) {
 				// 计算 x y 轴点击位置
@@ -117,10 +117,12 @@
 			},
 			touchmove(e) {
 				if (this.active < 0) return
-				let temY = e.mp.touches[0].clientY - this.topY
 				let temX = e.mp.touches[0].clientX - this.topX
-				let touchX = temX - this.itemw / 2
-				let touchY = temY - this.itemh / 2
+				let temY = e.mp.touches[0].clientY - this.topY
+				let touchX = temX - this.collisionOffX
+				let touchY = temY - this.collisionOffY
+				if (touchX <= 0) touchX = 0.001
+				if (touchY <= 0) touchY = 0.001
 				this.currentList[this.active].y = touchY
 				this.currentList[this.active].x = touchX
 				this.currentList[this.active].animation = false
@@ -165,24 +167,6 @@
 				}
 				this.moveUpdateCurrentList(-1)
 				this.active = -1
-			},
-			// 关闭按钮
-			close(index) {
-				// debugger
-				uni.showToast({
-					title: '点击删除'
-				})
-				console.log("我是删除的index 的SortNumber")
-				console.log(this.currentList[index].SortNumber)
-				this.currentList.forEach((item, i) => {
-					if (this.currentList[i].SortNumber > this.currentList[index].SortNumber) {
-						item.SortNumber--
-					}
-				})
-
-				this.moveUpdateCurrentList(-1)
-				this.currentList[index].isShow = 0
-
 			}
 		}
 	}
